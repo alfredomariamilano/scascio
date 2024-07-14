@@ -4,11 +4,10 @@ import { HeartIcon } from '~/components/HeartIcon'
 
 export default function Home() {
   let containerRef!: HTMLHeadingElement
-  const initialFontSize = 100
+  const initialFontSize = 50
 
   onMount(() => {
-    let calculateFontSizeAnimationFrame = 0
-    const fixFontSizeAnimationFrame = 0
+    const animationFrames: number[] = []
 
     const calculateFontSize = debounce(() => {
       const lines = Array.from(containerRef.children) as HTMLElement[]
@@ -18,71 +17,90 @@ export default function Home() {
       })
 
       // const fixFontSize = () => {
-      //   const fontSize = parseFloat(containerRef.style.fontSize)
+      //   let widestLine = lines[0]
 
-      //   containerRef.style.fontSize = `${fontSize - 1}px`
-
-      //   fixFontSizeAnimationFrame = requestAnimationFrame(() => {
-      //     if (
-      //       containerRef.scrollWidth >= containerRef.clientWidth ||
-      //       containerRef.scrollHeight >= containerRef.clientHeight
-      //     ) {
-      //       fixFontSize()
-      //     } else {
-      //       containerRef.style.opacity = '1'
+      //   lines.forEach(line => {
+      //     if (line.clientWidth > widestLine.clientWidth) {
+      //       widestLine = line
       //     }
       //   })
+
+      //   let contentHeight = 0
+
+      //   lines.forEach(line => {
+      //     contentHeight += line.clientHeight
+      //   })
+
+      //   const contentWidth = widestLine.clientWidth
+
+      //   const fontSize = parseFloat(containerRef.style.fontSize)
+
+      //   animationFrames.push(
+      //     requestAnimationFrame(() => {
+      //       if (
+      //         contentWidth > containerRef.clientWidth ||
+      //         contentHeight > containerRef.clientHeight
+      //       ) {
+      //         containerRef.style.fontSize = `${fontSize - 1}px`
+
+      //         fixFontSize()
+      //       } else {
+      //         containerRef.style.opacity = '1'
+      //       }
+      //     }),
+      //   )
       // }
 
-      calculateFontSizeAnimationFrame = requestAnimationFrame(() => {
-        let widestLine = lines[0]
+      animationFrames.push(
+        requestAnimationFrame(() => {
+          let widestLine = lines[0]
 
-        lines.forEach(line => {
-          if (line.clientWidth > widestLine.clientWidth) {
-            widestLine = line
-          }
-        })
+          lines.forEach(line => {
+            if (line.clientWidth > widestLine.clientWidth) {
+              widestLine = line
+            }
+          })
 
-        let contentHeight = 0
+          let contentHeight = 0
 
-        lines.forEach(line => {
-          line.style.fontSize = `${widestLine.clientWidth / line.clientWidth}em`
-          contentHeight += line.clientHeight
-        })
+          lines.forEach(line => {
+            line.style.fontSize = `${widestLine.clientWidth / line.clientWidth}em`
+            contentHeight += line.clientHeight
+          })
 
-        const contentWidth = widestLine.clientWidth
-        // const contentHeight = lines.reduce((acc, line) => acc + line.clientHeight, 0)
+          const contentWidth = widestLine.clientWidth
+          // const contentHeight = lines.reduce((acc, line) => acc + line.clientHeight, 0)
 
-        const containerWidth = containerRef.clientWidth
-        const containerHeight = containerRef.clientHeight
+          const containerWidth = containerRef.clientWidth
+          const containerHeight = containerRef.clientHeight
 
-        const scale = Math.min(containerWidth / contentWidth, containerHeight / contentHeight) - 0.1
+          const scale =
+            Math.min(containerWidth / contentWidth, containerHeight / contentHeight) - 0.1
 
-        containerRef.style.fontSize = `${scale * parseFloat(containerRef.style.fontSize)}px`
+          // containerRef.style.fontSize = `${scale * initialFontSize}px`
+          containerRef.style.fontSize = `${scale * parseFloat(containerRef.style.fontSize)}px`
 
-        // fixFontSize()
-        containerRef.style.opacity = '1'
-      })
+          // fixFontSize()
+          containerRef.style.opacity = '1'
+        }),
+      )
     }, 100)
 
     const prepareContainer = () => {
-      cancelAnimationFrame(fixFontSizeAnimationFrame)
-      cancelAnimationFrame(calculateFontSizeAnimationFrame)
+      animationFrames.forEach(cancelAnimationFrame)
 
-      containerRef.style.fontSize = `${initialFontSize}px`
-      containerRef.style.opacity = '0'
+      // containerRef.style.fontSize = `${initialFontSize}px`
+      // containerRef.style.opacity = '0'
     }
 
-    let onResizeAnimationFrame = 0
-
     const onResize = throttle(() => {
-      cancelAnimationFrame(onResizeAnimationFrame)
-
       prepareContainer()
 
-      onResizeAnimationFrame = requestAnimationFrame(() => {
-        calculateFontSize()
-      })
+      animationFrames.push(
+        requestAnimationFrame(() => {
+          calculateFontSize()
+        }),
+      )
     }, 50)
 
     onResize()
@@ -112,7 +130,7 @@ export default function Home() {
             'font-weight': '700',
             'font-style': 'normal',
           }}
-          class="m-0 flex h-full max-h-full min-h-full w-full min-w-full max-w-full flex-col items-center justify-center whitespace-nowrap text-center leading-none opacity-0 transition-[font-size,opacity]"
+          class="m-0 flex h-full max-h-full min-h-full w-full min-w-full max-w-full flex-col items-center justify-center overflow-hidden whitespace-nowrap text-center leading-none opacity-0 transition-[font-size,opacity]"
         >
           {/* <span>{'I ❤'}</span> */}
           <span class="flex flex-nowrap items-center justify-center">
