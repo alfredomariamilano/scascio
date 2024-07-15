@@ -42,8 +42,8 @@ export const Photos = () => {
                 onClick={e => {
                   const style: Partial<CSSStyleDeclaration> = {
                     position: 'fixed',
-                    width: '100svw',
-                    height: '100svh',
+                    width: '100vw',
+                    height: '100vh',
                     background: 'rgba(0, 0, 0, 1)',
                     top: '0',
                     left: '0',
