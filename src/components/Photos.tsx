@@ -31,7 +31,7 @@ export const Photos = () => {
     <section class="w-full overflow-hidden">
       <div
         ref={containerRef}
-        class="grid w-full grid-cols-1 overflow-hidden bg-[url('/icons/heart.svg')] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        class="grid w-full grid-cols-1 gap-3 overflow-hidden bg-[url('/icons/heart.svg')] p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
       >
         {/* <div class="grid-item-ghost" /> */}
         <For each={PHOTOS}>
