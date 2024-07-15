@@ -40,10 +40,10 @@ export const Photos = () => {
               <div
                 class="grid-item relative flex items-center justify-center"
                 onClick={e => {
-                  const style: Partial<CSSStyleDeclaration> = {
+                  const newStyle: Partial<CSSStyleDeclaration> = {
                     position: 'fixed',
-                    width: '100vw',
-                    height: '100vh',
+                    width: '100dvw',
+                    height: '100dvh',
                     background: 'rgba(0, 0, 0, 1)',
                     top: '0',
                     left: '0',
@@ -52,15 +52,17 @@ export const Photos = () => {
                     zIndex: '9999',
                   }
 
-                  const currentTargetStyle = e.currentTarget.style as any
+                  const target = e.currentTarget
 
-                  if (e.currentTarget.style.position === style.position) {
-                    Object.keys(style).forEach(property => {
-                      currentTargetStyle[property] = ''
+                  const targetStyle = target.style as any
+
+                  if (targetStyle.position === newStyle.position) {
+                    Object.keys(newStyle).forEach(property => {
+                      targetStyle[property] = ''
                     })
                   } else {
-                    Object.entries(style).forEach(([name, value]) => {
-                      currentTargetStyle[name] = value
+                    Object.entries(newStyle).forEach(([name, value]) => {
+                      targetStyle[name] = value
                     })
                   }
                 }}
