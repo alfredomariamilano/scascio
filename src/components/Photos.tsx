@@ -32,7 +32,7 @@ export const Photos = () => {
             return (
               <img
                 class="grid-item col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4"
-                src={`/images/${photo}.JPG`}
+                src={`/photos/${photo}.jpg`}
                 alt={`Random photo ${photo}`}
               />
             )
